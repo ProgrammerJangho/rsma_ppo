@@ -1,0 +1,80 @@
+# Warm-start + curriculum comparison for the |A| = 1 collapse.
+#
+# Every arm: same environment (configs/m2_hybrid.yaml), same interaction budget,
+# same evaluation channel seeds.  The BC checkpoints come from
+# scripts/pretrain_oracle.py on datasets/oracle_m2 (myopic estimated-CSIT oracle).
+#
+# Reference points measured earlier on this scenario:
+#   OMA 7.975 | max-AoI-first 9.237 | best collapsed PPO (C @ 1M) 10.501
+#   BC-only (count_then_subset) 12.571 with |A| = 2.000
+sweep:
+  base_env: configs/m2_hybrid.yaml
+  base_agent: configs/ppo_default.yaml
+  total_timesteps: 200000
+  seeds: [0, 1, 2]
+  eval_episodes: 20
+  variants:
+    # --- A: existing hybrid PPO (shipped defaults) ----------------------
+    A_hybrid_baseline: {}
+
+    # --- B: best hyper-parameters found in sweep_m2 ---------------------
+    B_hybrid_C:
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+
+    # --- C: fixed top-2 schedule, PPO learns the allocation only --------
+    C_fixed_top2:
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+      scheduling_head: fixed_top_m
+      conditional_allocation: true
+
+    # --- E: BC warm start + fixed top-2 ---------------------------------
+    E_bc_fixed_top2:
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+      scheduling_head: fixed_top_m
+      conditional_allocation: true
+      pretrained_actor: runs/bc_fixed_top_m/checkpoint.pt
+      reset_critic: true
+      actor_lr: 5.0e-5
+      critic_lr: 3.0e-4
+      probe_dataset: datasets/oracle_m2
+
+    # --- F: BC warm start + learned top-2 (categorical over C(4,2)) -----
+    F_bc_learned_top2:
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+      scheduling_head: topm_categorical
+      conditional_allocation: true
+      pretrained_actor: runs/bc_topm_categorical/checkpoint.pt
+      reset_critic: true
+      actor_lr: 5.0e-5
+      critic_lr: 3.0e-4
+      reference_kl_coef: 0.05
+      reference_kl_anneal_steps: 100000
+      probe_dataset: datasets/oracle_m2
+
+    # --- G: BC warm start + count-then-subset ---------------------------
+    G_bc_count_subset:
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+      scheduling_head: count_then_subset
+      conditional_allocation: true
+      pretrained_actor: runs/bc_cts/checkpoint.pt
+      reset_critic: true
+      actor_lr: 5.0e-5
+      critic_lr: 3.0e-4
+      reference_kl_coef: 0.05
+      reference_kl_anneal_steps: 100000
+      probe_dataset: datasets/oracle_m2

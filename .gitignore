@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Local environments, generated data, and working files
+runs/
+results/
+archive/
+tmp/
+output/
+*:Zone.Identifier
+*.doc
+docs/advisor_email_draft_*.md

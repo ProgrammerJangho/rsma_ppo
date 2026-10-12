@@ -1,0 +1,29 @@
+# Short RL validation at a phase-map-selected operating point.
+# A: flat PPO learns schedule AND allocation.
+# B: hierarchical - PPO learns the schedule, a bounded-budget CEM allocates.
+# Compare against the non-learning arms produced by scripts/run_baselines.py.
+sweep:
+  base_env: configs/op2_rsma.yaml
+  base_agent: configs/ppo_default.yaml
+  total_timesteps: 200000
+  seeds:
+  - 0
+  - 1
+  - 2
+  eval_episodes: 20
+  variants:
+    A_end_to_end_ppo:
+      ppo:
+        entropy_coef: 0.01
+        anneal_lr: false
+        gamma: 0.95
+        normalize_reward: true
+    B_hierarchical_ppo:
+      ppo:
+        entropy_coef: 0.01
+        anneal_lr: false
+        gamma: 0.95
+        normalize_reward: true
+        scheduling_head: subset_categorical
+      env:
+        allocator_mode: cem_fast

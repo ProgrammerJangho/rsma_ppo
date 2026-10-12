@@ -1,0 +1,31 @@
+# M1: FBL + 1-layer RSMA, no scheduling (every user is always active).
+#   PPO controls the common/private power split and the common-rate split only.
+#   Operating point: K = Nt = 2 (fully loaded) with strong CSIT error, which is
+#   the regime where the common stream measurably helps (see README section
+#   "Where the RSMA gain lives").
+env:
+  num_users: 2
+  num_antennas: 2
+  alpha: 0.8                # temporally correlated channel
+  csit_error_std: 0.5       # poor CSIT -> residual interference RZF cannot null
+  noise_power: 1.0
+  snr_db: 10.0
+  blocklength: 128
+  payload_bits: 256.0
+  private_beam: rzf
+  common_beam: principal
+  multiple_access: rsma
+  rate_split_mode: simplex_scaled
+  link_model: fbl
+  aoi_max: 64
+  aoi_init: one
+  scheduling_enabled: false # <- M1: continuous allocation only
+  power_scale_action: false
+  ack_mode: sampled
+  lambda_power: 0.0
+  lambda_tail: 0.0
+  lambda_violation: 10.0
+  aoi_tail_threshold: 10
+  episode_length: 200
+  obs_channel_mode: complex_flat
+  obs_include_prev_action: true

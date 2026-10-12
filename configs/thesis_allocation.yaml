@@ -1,0 +1,56 @@
+# Stage 1: diagnostic/pilot, NOT a selected RSMA-winning operating point.
+# PPO directly controls stream powers and common payload allocation.
+env:
+  num_users: 2
+  num_antennas: 2
+  alpha: 0.8
+  csit_error_std: 0.0  # verify perfect CSIT before introducing uncertainty
+  csit_error_mode: relative
+  pathloss_model: homogeneous
+  noise_power: 1.0
+  snr_db: 10.0
+  blocklength: 128
+  payload_bits: 256.0
+  private_beam: rzf
+  common_beam: principal
+  multiple_access: rsma
+  rate_split_mode: simplex_scaled
+  link_model: fbl
+  scheduling_enabled: false
+  allocator_mode: none
+  allocator_common_gate: false
+  power_scale_action: false
+  aoi_init: one
+  # From age=1, a 512-slot episode cannot reach 1024 even with no successes.
+  # This prevents clipping in this pilot; it is NOT an uncapped long-run model.
+  aoi_max: 1024
+  episode_length: 512
+  ack_mode: sampled
+  aoi_weights: [1.0, 1.0]
+  reward_scale: 0.5  # reward = -mean post-transmission AoI for feasible actions
+  lambda_power: 0.0
+  lambda_tail: 0.0
+  lambda_violation: 10.0
+  aoi_tail_threshold: 10
+  obs_channel_mode: complex_flat
+  obs_include_prev_action: true
+
+ppo:
+  total_timesteps: 32768  # short pilot only; main-study budget is not decided
+  num_envs: 4
+  rollout_steps: 128
+  minibatch_size: 128
+  update_epochs: 4
+  hidden_sizes: [128, 128]
+  learning_rate: 3.0e-4
+  gamma: 0.99
+  gae_lambda: 0.95
+  entropy_coef: 0.005
+  normalize_observation: true
+  normalize_reward: true
+  scalar_dist: beta
+  conditional_allocation: false
+  device: cpu
+  checkpoint_interval: 0
+  eval_interval: 0
+  seed: 0

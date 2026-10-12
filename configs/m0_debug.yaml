@@ -1,0 +1,38 @@
+# M0: minimal verification environment.
+#   K = 2, SISO (Nt = 1, so the "beam" is a scalar phase), fixed success
+#   probability -> the AoI recursion, the power book-keeping and the seeding can
+#   be checked without any PHY subtlety.
+#   Set link_model: shannon for the deterministic-outage variant, or fbl for the
+#   full model.
+env:
+  num_users: 2
+  num_antennas: 1
+  alpha: 0.0
+  csit_error_std: 0.0
+  noise_power: 1.0
+  snr_db: 10.0
+  blocklength: 128
+  payload_bits: 128.0
+  private_beam: mrt
+  common_beam: mrt_sum
+  multiple_access: rsma
+  link_model: fixed
+  fixed_success_prob: 0.8
+  aoi_max: 32
+  aoi_init: one
+  scheduling_enabled: true
+  ack_mode: sampled
+  lambda_violation: 10.0
+  aoi_tail_threshold: 8
+  episode_length: 50
+  obs_channel_mode: complex_flat
+ppo:
+  total_timesteps: 8192
+  num_envs: 4
+  rollout_steps: 64
+  update_epochs: 4
+  minibatch_size: 64
+  hidden_sizes: [64, 64]
+  entropy_coef: 0.01
+  checkpoint_interval: 2
+  device: cpu

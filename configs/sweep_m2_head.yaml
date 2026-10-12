@@ -1,0 +1,32 @@
+# Decisive test of the scheduling-head parameterisation.
+#
+# The Bernoulli head needs an "if nothing is scheduled, activate the argmax
+# user" repair.  Measurement (see README) showed that repair is a degenerate
+# attractor: driving every Bernoulli probability to ~0 maximises the
+# log-probability of the all-zero sample that PPO actually scores, while the
+# repair still hands the environment a reliable single-user schedule.  The
+# policy collapses to |A| = 1 and neither 5x compute nor 4x entropy fixes it.
+#
+# The subset-categorical head has no repair rule - every category is a valid
+# non-empty schedule and is exactly what gets scored - so it cannot exhibit the
+# same attractor.  Same environment, same budget, same evaluation seeds.
+sweep:
+  base_env: configs/m2_hybrid.yaml
+  base_agent: configs/ppo_default.yaml
+  total_timesteps: 200000
+  seeds: [0, 1, 2]
+  eval_episodes: 20
+  variants:
+    C_bernoulli:            # best variant from configs/sweep_m2.yaml
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+    C_categorical:          # identical hyper-parameters, different head
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+      scheduling_head: subset_categorical
+    baseline_categorical:   # shipped defaults + the categorical head
+      scheduling_head: subset_categorical

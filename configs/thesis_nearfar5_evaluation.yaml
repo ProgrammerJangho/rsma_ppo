@@ -1,0 +1,77 @@
+env:
+  num_users: 2
+  num_antennas: 2
+  alpha: 0.8
+  small_scale_model: rician_ula
+  rician_k_db: 8.0
+  user_angles_deg:
+  - -10.0
+  - 10.0
+  antenna_spacing_wavelength: 0.5
+  pathloss_model: explicit_near_far
+  path_gains_db:
+  - 0.0
+  - -5.0
+  beta_normalization: mean_one
+  csit_error_std: 0.2
+  csit_error_mode: relative
+  noise_power: 1.0
+  snr_db: 10.0
+  blocklength: 128
+  payload_bits: 256.0
+  private_beam: rzf
+  common_beam: principal
+  multiple_access: rsma
+  rate_split_mode: simplex_scaled
+  link_model: fbl
+  scheduling_enabled: false
+  allocator_mode: none
+  power_scale_action: false
+  aoi_init: one
+  aoi_max: 1024
+  aoi_cap_enabled: false
+  episode_length: 8192
+  ack_mode: sampled
+  aoi_weights:
+  - 1.0
+  - 1.0
+  reward_scale: 0.5
+  obs_channel_mode: complex_flat
+  obs_include_prev_action: true
+evaluation:
+  protocol_version: 1
+  eval_seeds:
+  - 930000
+  - 930001
+  - 930002
+  - 930003
+  - 930004
+  - 930005
+  episode_steps: 8192
+  burn_in: 2048
+  deterministic: true
+  paired_reference: sdma_power_ppo
+  fixed_rsma:
+    common_power_fraction: 0.25
+    common_payload_scale: 0.3
+  checkpoint_groups:
+    objective_warm_joint_gate:
+      expected_allocation_control: joint
+      expected_common_gate: true
+      checkpoints:
+      - training_seed: 0
+        path: results/rician_ppo_nearfar5_csit02_objective_seed0_v1/runs/joint_gate_seed0/checkpoint.pt
+      - training_seed: 1
+        path: results/rician_ppo_nearfar5_csit02_objective_seed1_v1/runs/joint_gate_seed1/checkpoint.pt
+      - training_seed: 2
+        path: results/rician_ppo_nearfar5_csit02_objective_seed2_v1/runs/joint_gate_seed2/checkpoint.pt
+    sdma_power_ppo:
+      expected_allocation_control: sdma_power
+      expected_common_gate: false
+      checkpoints:
+      - training_seed: 0
+        path: results/rician_ppo_nearfar5_csit02_sdma_power_3seed_v1/runs/sdma_power_seed0/checkpoint.pt
+      - training_seed: 1
+        path: results/rician_ppo_nearfar5_csit02_sdma_power_3seed_v1/runs/sdma_power_seed1/checkpoint.pt
+      - training_seed: 2
+        path: results/rician_ppo_nearfar5_csit02_sdma_power_3seed_v1/runs/sdma_power_seed2/checkpoint.pt

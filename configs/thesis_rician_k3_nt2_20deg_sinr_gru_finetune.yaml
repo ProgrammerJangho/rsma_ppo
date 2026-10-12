@@ -1,0 +1,68 @@
+# GRU-PPO counterpart of the fixed 20-degree target experiment.
+# It warm-starts from the same objective-only Stage-1 actor as feed-forward PPO.
+env:
+  num_users: 3
+  num_antennas: 2
+  alpha: 0.8
+  small_scale_model: rician_ula
+  rician_k_db: 8.0
+  user_angles_deg: [-10.0, 0.0, 10.0]
+  user_angle_sets_deg:
+    - [-10.0, 0.0, 10.0]
+    - [-10.0, 10.0, 0.0]
+    - [0.0, -10.0, 10.0]
+    - [0.0, 10.0, -10.0]
+    - [10.0, -10.0, 0.0]
+    - [10.0, 0.0, -10.0]
+  antenna_spacing_wavelength: 0.5
+  csit_error_std: 0.2
+  csit_error_mode: relative
+  pathloss_model: homogeneous
+  noise_power: 1.0
+  snr_db: 15.0
+  blocklength: 128
+  payload_bits: 256.0
+  private_beam: rzf
+  common_beam: principal
+  multiple_access: rsma
+  rate_split_mode: per_user_fraction
+  link_model: fbl
+  scheduling_enabled: false
+  allocator_mode: none
+  power_scale_action: false
+  aoi_init: one
+  aoi_max: 1024
+  aoi_cap_enabled: false
+  episode_length: 512
+  ack_mode: sampled
+  aoi_weights: [1.0, 1.0, 1.0]
+  reward_scale: 0.3333333333333333
+  obs_channel_mode: beam_sinr_features
+  obs_include_prev_action: true
+  obs_include_snr: true
+  obs_include_blocklength: true
+ppo:
+  total_timesteps: 524288
+  num_envs: 4
+  rollout_steps: 128
+  minibatch_size: 128
+  update_epochs: 4
+  hidden_sizes: [128, 128]
+  recurrent_enabled: true
+  recurrent_hidden_size: 128
+  recurrent_seq_len: 32
+  learning_rate: 1.0e-4
+  actor_lr: 1.0e-4
+  critic_lr: 5.0e-4
+  gamma: 0.99
+  gae_lambda: 0.95
+  entropy_coef: 0.002
+  normalize_observation: true
+  freeze_observation_stats: true
+  normalize_reward: true
+  allocation_control: joint
+  initial_common_power_fraction: 0.25
+  initial_common_fraction: 0.05
+  device: cpu
+  checkpoint_interval: 256
+  eval_interval: 0

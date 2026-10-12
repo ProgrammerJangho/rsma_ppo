@@ -1,0 +1,67 @@
+{
+  "config_hash": "f852b295293ec55d",
+  "config": "configs/thesis_rician_k3_nt2_all3_ppo_csit02.yaml",
+  "sources": [
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed0/checkpoint.pt",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed1/checkpoint.pt",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed2/checkpoint.pt"
+  ],
+  "csit_mode": "estimated",
+  "also_genie": false,
+  "seed": 982000,
+  "sizes": {
+    "train": 150,
+    "val": 150,
+    "test": 150
+  },
+  "num_trajectories": 18,
+  "cem": {
+    "iterations": 5,
+    "population": 256,
+    "restarts": 2,
+    "evaluations_per_scheme_state": 2560
+  },
+  "trajectory_split": {
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed1/checkpoint.pt#368341446": "train",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed1/checkpoint.pt#1075861311": "val",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed2/checkpoint.pt#1047738079": "test",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed0/checkpoint.pt#289779905": "train",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed1/checkpoint.pt#852379897": "val",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed0/checkpoint.pt#1455264755": "test",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed0/checkpoint.pt#531435128": "train",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed2/checkpoint.pt#878153050": "val",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed2/checkpoint.pt#1193127303": "test",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed0/checkpoint.pt#1061161143": "train",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed2/checkpoint.pt#250617591": "val",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed1/checkpoint.pt#205325828": "test",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed0/checkpoint.pt#174914789": "train",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed1/checkpoint.pt#1122811760": "val",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed2/checkpoint.pt#423260986": "test",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed1/checkpoint.pt#1063561998": "train",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed2/checkpoint.pt#1225208023": "val",
+    "ppo-deterministic:results/rician_ppo_k3_nt2_all3_262k_v1/runs/rsma_joint_gate_seed0/checkpoint.pt#1309654226": "test"
+  },
+  "collect_seconds": 2.08,
+  "label_seconds": 1.28,
+  "total_seconds": 3.38,
+  "required_keys": [
+    "observation",
+    "h_hat_real",
+    "h_hat_imag",
+    "aoi",
+    "oracle_mask",
+    "oracle_count",
+    "oracle_power_fractions",
+    "oracle_rate_fractions",
+    "oracle_rho_r",
+    "oracle_common_gate",
+    "oracle_expected_aoi",
+    "second_mask",
+    "second_expected_aoi",
+    "objective_gap",
+    "cem_seed",
+    "source",
+    "trajectory",
+    "split"
+  ]
+}

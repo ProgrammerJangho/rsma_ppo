@@ -1,0 +1,68 @@
+# Long-horizon, matched-trajectory CEM reference for the final 262k PPO policies.
+# This is the frozen thesis protocol: six held-out trajectories, 8,192 slots,
+# and a 2,048-slot burn-in.  Raw RSMA-CEM and SDMA-CEM each use 960 candidate
+# evaluations per slot; safeguarded RSMA-CEM solves both (1,920 per slot).
+env:
+  num_users: 2
+  num_antennas: 2
+  alpha: 0.8
+  small_scale_model: rician_ula
+  rician_k_db: 8.0
+  user_angles_deg: [-10.0, 10.0]
+  antenna_spacing_wavelength: 0.5
+  csit_error_std: 0.2
+  csit_error_mode: relative
+  pathloss_model: homogeneous
+  noise_power: 1.0
+  snr_db: 10.0
+  blocklength: 128
+  payload_bits: 256.0
+  private_beam: rzf
+  common_beam: principal
+  multiple_access: rsma
+  rate_split_mode: simplex_scaled
+  link_model: fbl
+  scheduling_enabled: false
+  allocator_mode: none
+  power_scale_action: false
+  aoi_init: one
+  aoi_max: 1024
+  aoi_cap_enabled: false
+  episode_length: 8192
+  ack_mode: sampled
+  aoi_weights: [1.0, 1.0]
+  reward_scale: 0.5
+  obs_channel_mode: complex_flat
+  obs_include_prev_action: true
+
+evaluation:
+  protocol_version: 1
+  eval_seeds: [930000, 930001, 930002, 930003, 930004, 930005]
+  episode_steps: 8192
+  burn_in: 2048
+  deterministic: true
+  paired_reference: rsma_262k
+  cem:
+    iterations: 5
+    population: 192
+    restarts: 1
+    evaluations_per_solve: 960
+  checkpoint_groups:
+    rsma_262k:
+      expected_allocation_control: joint
+      expected_common_gate: true
+      checkpoints:
+        - {training_seed: 0, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/rsma_joint_gate_seed0/checkpoint.pt}
+        - {training_seed: 1, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/rsma_joint_gate_seed1/checkpoint.pt}
+        - {training_seed: 2, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/rsma_joint_gate_seed2/checkpoint.pt}
+        - {training_seed: 3, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/rsma_joint_gate_seed3/checkpoint.pt}
+        - {training_seed: 4, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/rsma_joint_gate_seed4/checkpoint.pt}
+    sdma_262k:
+      expected_allocation_control: sdma_power
+      expected_common_gate: false
+      checkpoints:
+        - {training_seed: 0, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/sdma_power_seed0/checkpoint.pt}
+        - {training_seed: 1, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/sdma_power_seed1/checkpoint.pt}
+        - {training_seed: 2, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/sdma_power_seed2/checkpoint.pt}
+        - {training_seed: 3, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/sdma_power_seed3/checkpoint.pt}
+        - {training_seed: 4, path: results/rician_ppo_20deg_csit02_matched_budget_262k_v1/runs/sdma_power_seed4/checkpoint.pt}

@@ -1,0 +1,30 @@
+# M2: hybrid control - discrete scheduling + continuous power/rate allocation.
+#   Overloaded network (K = 4 > Nt = 2): scheduling matters a lot and the common
+#   stream is useful when many users are active simultaneously.
+env:
+  num_users: 4
+  num_antennas: 2
+  alpha: 0.8
+  csit_error_std: 0.3
+  noise_power: 1.0
+  snr_db: 10.0
+  blocklength: 128
+  payload_bits: 192.0
+  private_beam: rzf
+  common_beam: principal
+  multiple_access: rsma
+  rate_split_mode: simplex_scaled
+  link_model: fbl
+  aoi_max: 64
+  aoi_init: one
+  aoi_weights: null
+  scheduling_enabled: true  # <- M2: hybrid action space
+  power_scale_action: false
+  ack_mode: sampled
+  lambda_power: 0.0
+  lambda_tail: 0.05         # small tail-AoI penalty
+  lambda_violation: 10.0
+  aoi_tail_threshold: 10
+  episode_length: 200
+  obs_channel_mode: complex_flat
+  obs_include_prev_action: true

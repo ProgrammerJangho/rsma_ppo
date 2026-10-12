@@ -1,0 +1,32 @@
+# PHY and rate-split ablations on the M2 scenario.
+# Every arm shares the SAME slot duration, transmit power, blocklength, payload
+# and network size - run_sweep.py rejects overrides of those fields (see
+# PROTECTED_ENV_FIELDS) so an ablation cannot accidentally change the budget.
+sweep:
+  base_env: configs/m2_hybrid.yaml
+  base_agent: configs/ppo_default.yaml
+  total_timesteps: 200000
+  seeds: [0, 1, 2]
+  eval_episodes: 20
+  variants:
+    # --- reference -----------------------------------------------------
+    reference: {}                                   # RZF + principal + RSMA + FBL + sigma_e=0.3
+
+    # --- common beam heuristic ------------------------------------------
+    common_mrt_sum:   {env: {common_beam: mrt_sum}}
+
+    # --- private beam ----------------------------------------------------
+    private_mrt:      {env: {private_beam: mrt}}
+    private_zf:       {env: {private_beam: zf}}
+
+    # --- rate-split parameterisation -------------------------------------
+    per_user_fraction: {env: {rate_split_mode: per_user_fraction}}
+
+    # --- finite blocklength vs Shannon ------------------------------------
+    shannon:          {env: {link_model: shannon}}
+
+    # --- CSIT quality ------------------------------------------------------
+    perfect_csit:     {env: {csit_error_std: 0.0}}
+
+    # --- common stream on/off (RSMA vs SDMA) --------------------------------
+    no_common_stream: {env: {multiple_access: sdma}}

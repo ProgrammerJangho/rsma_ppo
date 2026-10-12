@@ -1,0 +1,31 @@
+# Operating point op3: selected by the phase map as one of the few
+# cells where optimized RSMA beats BOTH SDMA (>5%) and OMA (>0%).
+#   K=Nt=2, SNR=15.0 dB, sigma_e=0.0, n=128, d=256 bits (rate 2 b/use), alpha=0.9
+# Myopic screening gains at this cell: see results/phase_map/focused.csv.
+# NOTE those are one-step expected-AoI gains; the long-run AoI is what the
+# RL validation in configs/sweep_op3.yaml actually measures.
+env:
+  num_users: 2
+  num_antennas: 2
+  alpha: 0.9
+  csit_error_std: 0.0
+  noise_power: 1.0
+  snr_db: 15.0
+  blocklength: 128
+  payload_bits: 256.0
+  private_beam: rzf
+  common_beam: principal
+  multiple_access: rsma
+  rate_split_mode: simplex_scaled
+  link_model: fbl
+  aoi_max: 64
+  aoi_init: one
+  scheduling_enabled: true
+  power_scale_action: false
+  ack_mode: sampled
+  lambda_violation: 10.0
+  aoi_tail_threshold: 10
+  episode_length: 200
+  obs_channel_mode: complex_flat
+  obs_include_prev_action: true
+  allocator_mode: none

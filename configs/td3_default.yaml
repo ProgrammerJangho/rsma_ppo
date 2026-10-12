@@ -1,0 +1,27 @@
+# TD3 baseline (continuous resource allocation only - no discrete scheduling).
+# Use with an environment config that sets scheduling_enabled: false, e.g.
+#   configs/m1_rsma.yaml or configs/m2_continuous.yaml
+td3:
+  total_timesteps: 400000
+  num_envs: 8
+  buffer_size: 300000
+  batch_size: 256
+  learning_starts: 10000     # uniform random latents before learning begins
+  gradient_steps_per_iter: 1 # gradient updates per vectorised env step
+  gamma: 0.99
+  tau: 0.005                 # Polyak averaging coefficient
+  policy_delay: 2            # delayed actor / target updates
+  exploration_noise: 0.15    # Gaussian noise added to the actor output
+  target_noise: 0.2          # target policy smoothing
+  noise_clip: 0.5
+  actor_lr: 3.0e-4
+  critic_lr: 3.0e-4
+  max_grad_norm: 10.0
+  latent_scale: 3.0          # actor output is latent_scale * tanh(.)
+  normalize_observation: true
+  hidden_sizes: [256, 256]
+  activation: relu
+  device: cpu
+  log_interval: 20
+  checkpoint_interval: 100
+  seed: 0

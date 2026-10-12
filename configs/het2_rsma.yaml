@@ -1,0 +1,50 @@
+# Heterogeneous operating point het2: one of the 3 cells where the
+# near/far phase map found RSMA gain AND scheduling value together.
+#   K=6, Nt=4, disparity=0.0 dB, SNR=20.0 dB, sigma_e=0.3
+#   rate=4 b/use (d=512, n=128), alpha=0.0,
+#   AoI weighting=equal
+# NOTE: disparity 0.0 dB - the qualifying cells sit at LOW disparity.
+# Large near/far gaps destroy the RSMA gain (see README).
+env:
+  num_users: 6
+  num_antennas: 4
+  alpha: 0.0
+  csit_error_std: 0.3
+  csit_error_mode: normalized
+  noise_power: 1.0
+  snr_db: 20.0
+  blocklength: 128
+  payload_bits: 512.0
+  pathloss_model: explicit_near_far
+  path_gains_db:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - -0.0
+  - -0.0
+  user_classes:
+  - near
+  - near
+  - middle
+  - middle
+  - far
+  - far
+  beta_normalization: mean_one
+  geometry_seed: 0
+  aoi_weight_mode: equal
+  private_beam: rzf
+  common_beam: principal
+  multiple_access: rsma
+  rate_split_mode: simplex_scaled
+  link_model: fbl
+  aoi_max: 64
+  aoi_init: one
+  scheduling_enabled: true
+  ack_mode: sampled
+  lambda_violation: 10.0
+  aoi_tail_threshold: 10
+  episode_length: 200
+  obs_channel_mode: complex_flat
+  obs_include_prev_action: true
+  allocator_mode: none

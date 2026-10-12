@@ -1,0 +1,38 @@
+# Architectural test: does conditioning the allocation heads on the sampled
+# schedule break the |A| = 1 collapse?
+#
+# Finding so far: neither entropy (4x), LR annealing, gamma, reward
+# normalisation, 5x compute, nor removing the all-zero repair rule
+# (subset_categorical) escapes the collapse.  The remaining structural
+# suspect is that the power/rate logits are produced from the observation
+# ALONE - they are identical whether 1 or 4 users are active - so an
+# exploratory 2-user schedule is always evaluated with an allocation tuned
+# for the modal 1-user schedule.
+#
+# conditional_allocation: true gives pi(a|s) = pi(A|s) * pi(alloc|s, A).
+# Same environment, same budget, same evaluation seeds as sweep_m2.yaml.
+sweep:
+  base_env: configs/m2_hybrid.yaml
+  base_agent: configs/ppo_default.yaml
+  total_timesteps: 200000
+  seeds: [0, 1, 2]
+  eval_episodes: 20
+  variants:
+    C_flat:               # reference: best hyper-parameters, unconditioned heads
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+    C_conditional:        # identical, but the heads see the sampled schedule
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+      conditional_allocation: true
+    C_conditional_cat:    # + the repair-free categorical scheduling head
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+      conditional_allocation: true
+      scheduling_head: subset_categorical

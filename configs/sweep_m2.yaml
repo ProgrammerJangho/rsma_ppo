@@ -1,0 +1,31 @@
+# Short hyper-parameter sweep for the M2 scheduling-collapse investigation.
+# Every variant uses the SAME environment, the SAME interaction budget and the
+# SAME evaluation channel seeds; only the listed PPO fields differ.
+sweep:
+  base_env: configs/m2_hybrid.yaml
+  base_agent: configs/ppo_default.yaml
+  total_timesteps: 200000
+  seeds: [0, 1, 2]
+  eval_episodes: 20
+  variants:
+    baseline: {}                      # current shipped defaults
+    A:
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.99
+      normalize_reward: false
+    B:
+      entropy_coef: 0.02
+      anneal_lr: false
+      gamma: 0.99
+      normalize_reward: false
+    C:
+      entropy_coef: 0.01
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true
+    D:
+      entropy_coef: 0.02
+      anneal_lr: false
+      gamma: 0.95
+      normalize_reward: true

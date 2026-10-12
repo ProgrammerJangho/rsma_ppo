@@ -1,0 +1,65 @@
+# Default environment: single-cell MU-MISO downlink, 1-layer RSMA, FBL, AoI.
+# Every key maps 1:1 to rsma_aoi.utils.config.EnvConfig.
+env:
+  # --- topology ---------------------------------------------------------
+  num_users: 2
+  num_antennas: 4
+
+  # --- channel ----------------------------------------------------------
+  alpha: 0.0                # Gauss-Markov correlation (0 = i.i.d. block fading)
+  small_scale_model: rayleigh  # rayleigh | rician_ula
+  rician_k_db: 8.0
+  user_angles_deg: null       # required for rician_ula, one physical AoD per user
+  user_angle_sets_deg: null   # optional episode-wise uniform choice of AoD vectors
+  antenna_spacing_wavelength: 0.5
+  path_gains_db: null       # null -> 0 dB for every user
+  csit_error_std: 0.0       # sigma_e; 0 = perfect CSIT
+
+  # --- PHY --------------------------------------------------------------
+  noise_power: 1.0
+  snr_db: 10.0              # P_max / sigma_n^2; overrides p_max when set
+  snr_db_values: null       # optional episode-wise uniform SNR choices (dB)
+  p_max: null
+  blocklength: 128          # channel uses per slot
+  blocklength_values: null  # optional episode-uniform list, e.g. [64, 128, 256]
+  payload_bits: 256.0       # D_k, scalar or per-user list
+  private_beam: rzf         # mrt | zf | rzf
+  common_beam: principal    # mrt_sum | principal | maxmin (diagnostic heuristic)
+  common_beam_iters: 30
+  common_beam_damping: 0.3
+  rzf_regularization: null  # null -> K * sigma_n^2 / P_max
+  multiple_access: rsma     # rsma | sdma | oma | noma
+  rate_split_mode: per_user_fraction  # canonical: phi_k; simplex_scaled is legacy
+  # direct: rho is a fraction of the message-splitting cap.
+  # fbl_normalized: rho is a fraction of the h_hat-based FBL payload budget.
+  common_payload_mapping: direct    # direct | fbl_normalized
+  common_target_bler: 0.1           # used only by fbl_normalized
+  link_model: fbl           # fbl | shannon | fixed
+  fixed_success_prob: 0.8   # only used by link_model: fixed
+
+  # --- AoI --------------------------------------------------------------
+  aoi_max: 64
+  aoi_init: one             # one | random
+  aoi_weights: null         # null -> all ones
+
+  # --- actions ----------------------------------------------------------
+  scheduling_enabled: true
+  power_scale_action: false # add a rho_P in (0,1]; off -> always radiate P_max
+
+  # --- feedback ---------------------------------------------------------
+  ack_mode: sampled         # sampled | expected (expected = debugging only)
+
+  # --- reward -----------------------------------------------------------
+  reward_scale: null        # null -> 1 / (K * aoi_max)
+  lambda_power: 0.0
+  lambda_tail: 0.0
+  lambda_violation: 10.0
+  aoi_tail_threshold: 10
+
+  # --- episode / observation -------------------------------------------
+  episode_length: 200
+  obs_channel_mode: complex_flat   # complex_flat | gain_features | beam_sinr_features | none
+  obs_include_prev_action: true
+  obs_include_snr: false    # required when snr_db_values is configured
+  obs_include_blocklength: false  # required when blocklength_values is configured
+  feasibility_tol: 1.0e-5
